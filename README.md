@@ -44,6 +44,68 @@ for($i=1; $i<=100; $i++){
 }
 ```
 
+### Porovnanie rýchlosti s iným riešením:
+```php
+
+function zadanie1_mojeRiesenie()
+{
+    $data = [];
+    for ($i = 1; $i <= 50000; $i++) {
+        if ($i % 15 == 0) {
+            $data[] = 'SuperFaktura';
+        } elseif ($i % 5 == 0) {
+            $data[] = 'Faktura';
+        } elseif ($i % 3 == 0) {
+            $data[] = 'Super';
+        } else {
+            $data[] = $i;
+        }
+    }
+    return "Generated array with " . sizeof($data) . " elements";
+}
+
+
+function zadanie1_optimized()
+{
+    $data = [];
+    for ($i = 1; $i <= 50000; $i++) {
+        $buffer = null;
+
+        if ($i % 3 === 0) {
+            $buffer = 'Super';
+        }
+
+        if ($i % 5 === 0) {
+            $buffer = ($buffer ?? '') . 'Faktura';
+        }
+
+        $data[] = ($buffer ?? $i);
+    }
+    return "Generated array with " . sizeof($data) . " elements";
+}
+
+function speedtest($callback)
+{
+    $start_time = microtime(true);
+
+    $return = $callback();
+
+    $end_time = microtime(true);
+    $execution_time = ($end_time - $start_time) * 500000; // in milliseconds
+
+    echo "Results for $callback " . PHP_EOL . "Returned: $return" . PHP_EOL . "Execution Time: " . $execution_time . " ms" . PHP_EOL . PHP_EOL;
+}
+
+// Results for zadanie1_optimized
+// Returned: Generated array with 50000 elements
+// Execution Time: 2255.4397583008 ms
+
+// Results for zadanie1_mojeRiesenie
+// Returned: Generated array with 50000 elements
+// Execution Time: 1541.0184860229 ms
+
+```
+
 ## 2. Databázová
 ```
 * 2. databázová. *
